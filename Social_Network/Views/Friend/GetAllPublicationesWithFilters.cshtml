@@ -1,0 +1,113 @@
+﻿@using Social_Network.Core.Application.ViewModels.Comments;
+@using Social_Network.Core.Application.ViewModels.Publications;
+@using Social_Network.Core.Application.ViewModels.Users;
+@model List<PublicationViewModel>
+
+@{
+    List<CommentViewModel> CommentList = ViewBag.Comment;
+}
+
+@if (Model == null || Model.Count == 0)
+{
+    <h4 class="text-white">There aren't publication yet</h4>
+}
+<div class="col-md-4 mx-auto">
+    <p class="fs-3 fw-bold text-center text-white">Friend Publications</p>
+</div>
+<div class="row mt-4">
+    <div class="col-12">
+        <a class="btn btn-success text-white" asp-controller="Friend" asp-action="GetAllPublicationsFriend">Back to the friend list</a>
+    </div>
+</div>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            @foreach (PublicationViewModel item in Model.OrderByDescending(x => x.Id))
+            {
+                <div class="card mt-5 bg-dark text-white border-primary">
+                    <div class="card-header border-secondary">
+                        <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="d-flex flex-row gap-2 align-items-center align-content-center">
+                                <img src="@item.ImageUser" class="gap-3 rounded-circle" width="50" height="50" alt="...">
+                                <h5>@item.UserName</h5>
+                            </div>
+                            <div class="m-0">
+                                <small class="text-muted">@item.Created</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mt-4 gap-4">
+                        <div class="row">
+                            <div class="col-12 d-flex flex-nowrap flex-column">
+                                <p>@item.Caption</p>
+                                <img src="@item.Picture" class="img-size-generic" alt="" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-footer border-secondary">
+                        <span class="text-danger" style="display:none;" id="error">The comment are empty!</span>
+                        <form method="post" asp-controller="Comment" asp-action="Index">
+                            <button class="btn btn-primary" onclick=toggleComment(@item.Id)>Comment</button>
+                            <div class="form-group" id="@item.Id" style="display:none;">
+                                <textarea id="Caption" name="Caption" class="form-control" rows="3" placeholder="Escribe un comentario" required></textarea>
+                                <input type="hidden" id="PublicationId" value="@item.Id" name="PublicationId" />
+                                <input type="hidden" id="Act" value="GetAllPublicationesWithFilters" name="Act" />
+                                <input type="hidden" id="Cont" value="Friend" name="Cont" />
+                                <button class="btn btn-primary mt-2">Comment</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div @*style="display:none;" id="@item.Id"*@>
+                    <button class="btn btn-toolbar btn-outline-primary comment-toggle btn-lg w-100" onclick=toggleComments(this)>Show Comments</button>
+                    <div class="card comment d-none bg-dark">
+                        @if (item.Comments.Count() != null)
+                        {
+                            @foreach (CommentViewModel comments in CommentList.OrderByDescending(x => x.Id).Where(p => p.PublicationId == item.Id))
+                            {
+                                <div class="row p-2 comment-list bg-dark text-white">
+                                    <div class="col">
+                                        <div class="d-flex flex-row">
+                                            <img src="@comments.UserImage" class="gap-3 rounded-circle" width="30" height="30" alt="...">
+                                            <p class="mleft-p mt-1">@comments.UserName</p>
+                                        </div>
+                                        <p>@comments.Caption</p>
+                                    </div>
+                                    <hr />
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-white mt-2">No hay comentarios</p>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    function toggleComment(Id) {
+        var commentSection = document.getElementById(Id)
+        if (commentSection.style.display === "none") {
+            commentSection.style.display = "block";
+        } else {
+            commentSection.style.display = "none";
+        }
+    }
+</script>
+
+<script>
+    function toggleComments(commentBtn) {
+        var comments = commentBtn.parentNode.getElementsByClassName("comment");
+        for (var i = 0; i < comments.length; i++) {
+            if (comments[i].classList.contains("d-none")) {
+                comments[i].classList.remove("d-none");
+            } else {
+                comments[i].classList.add("d-none");
+            }
+        }
+    }
+</script>

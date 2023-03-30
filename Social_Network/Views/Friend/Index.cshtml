@@ -1,0 +1,32 @@
+﻿@using Social_Network.Core.Application.ViewModels.Users;
+@using Social_Network.Core.Application.ViewModels.Friends;
+@using Social_Network.Core.Application.ViewModels.Publications;
+@model UserViewModel
+
+<div class="container-fluid">
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-4 offset-4">
+                    <div class="card border-primary">
+                        <div class="card-body bg-dark border-secondary">
+                            @Html.ValidationSummary(false,"",new {@class = "text-danger"})
+                            <form method="post" asp-controller="Friend" asp-action="Index">
+                                <div class="text-center">
+                                    <label class="form-label text-white">Enter the User Name of your Friend</label>
+                                    <input class="form-control" type="text" name="UserName" id="UserName" />
+                                </div>
+                                <center>
+                                    <div class="col-3 mt-2 d-flex flex-row gap-2">
+                                        <button type="submit" class="btn btn-outline-success border-secondary">Search</button>
+                                        <a class="btn btn-sm btn-outline-primary" asp-controller="Friend" asp-action="GetAllPublicationsFriend">Back</a>
+                                    </div>
+                                </center>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

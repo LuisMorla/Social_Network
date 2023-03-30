@@ -1,0 +1,40 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+
+.mright {
+    margin-right: 70px;
+}
+
+.mleft {
+    margin-left: 70px;
+}
+
+.mleft-p {
+    margin-left: 10px;
+}
+
+
+.img-circle{
+    border-radius:50%;
+}
+
+.large{
+    height:60%;
+}

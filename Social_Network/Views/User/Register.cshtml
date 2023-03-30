@@ -1,0 +1,73 @@
+﻿@using Social_Network.Core.Application.ViewModels.Users;
+@model SaveUserViewModel
+<div class="container text-white">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2 class="text-center mb-4">Register</h2>
+            <form method="post" enctype="multipart/form-data" asp-controller="User" asp-action="Register">
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">Name</label>
+                    <input asp-for="Name" type="text" class="form-control">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+
+                </div>
+                <div class="mb-3">
+                    <label asp-for="LastName" class="form-label">Last Name</label>
+                    <input asp-for="LastName" type="text" class="form-control">
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <p class="text-danger">@Model.Validate</p>
+                    <label asp-for="Username" class="form-label">User Name</label>
+                    <input asp-for="Username" type="text" class="form-control">
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input asp-for="Email" type="email" class="form-control">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="PhoneNumber" class="form-label">Phone</label>
+                    <input asp-for="PhoneNumber" id="telefono" oninput="formatoTelefono(this)" type="text" class="form-control">
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="File" class="form-label">Photo</label>
+                    <input asp-for="File" class="form-control">
+                    <span asp-validation-for="File" class="text-danger"></span>
+
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label">Contraseña</label>
+                    <input asp-for="Password" type="password" class="form-control">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ConfirmPassword" class="form-label">Confirmar contraseña</label>
+                    <input asp-for="ConfirmPassword" type="password" class="form-control">
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="Id" />
+                <div class="text-center">
+                    <button type="submit" class="w-100 btn btn-primary btn-lg">Register</button>
+                    <a asp-controller="User" asp-action="Index" class="w-100 btn btn-warning btn-lg mt-2">Back To Login</a>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function formatoTelefono(inputTelefono) {
+        // Elimina todos los caracteres no numéricos del valor del input
+        let numero = inputTelefono.value.replace(/\D/g, "");
+
+        // Aplica el formato (123) 456-7890
+        numero = "(" + numero.substring(0, 3) + ") " + numero.substring(3, 6) + "-" + numero.substring(6, 10);
+
+        // Actualiza el valor del input con el número de teléfono formateado
+        inputTelefono.value = numero;
+    }
+</script>

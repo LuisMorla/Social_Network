@@ -1,0 +1,22 @@
+﻿@model Social_Network.Core.Application.ViewModels.Friends.SaveFriendViewModel
+
+@{
+    ViewData["Title"] = "Eliminar Pokemon";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4>Are you sure you want to delete this friend?</h4>
+                <div class="card-body">
+                    <form method="post" asp-controller="Friend" asp-action="DeletePost">
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-warning">Delete</button>
+                        <a asp-controller="Publication" asp-action="Index" class="btn btn-primary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

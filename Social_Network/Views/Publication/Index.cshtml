@@ -1,0 +1,131 @@
+﻿@using Social_Network.Core.Application.ViewModels.Publications;
+@using Social_Network.Core.Application.ViewModels.Users;
+@using Social_Network.Core.Application.ViewModels.Comments;
+
+@model List<PublicationViewModel>
+
+@{
+    List<CommentViewModel> CommentList = ViewBag.Comment;
+}
+
+<div class="row">
+    <div class="col-6 offset-3">
+        <div class="card bg-dark text-white border-primary">
+            <div class="card-body">
+                <p class="text-danger">@ViewBag.Error</p>
+                <form method="post" enctype="multipart/form-data" asp-controller="Publication" asp-action="Index">
+                    <div class="form-group border-secondary">
+                        <textarea name="Caption" class="form-control bg-dark text-white border-secondary" placeholder="What's on your mind?"></textarea>
+                    </div>
+                    <div class="form-control bg-dark text-white border-secondary">
+                        <input class="form-control bg-dark text-white border-secondary" name="File" type="file" />
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button type="submit" class="btn btn-primary w-100 btn-lg">Post</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            @foreach (PublicationViewModel item in Model.OrderByDescending(x => x.Id))
+            {
+                <div class="card bg-dark mt-5 text-white border-primary">
+                    <div class="card-header border-secondary">
+                        <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="d-flex flex-row gap-2 align-items-center align-content-center">
+                                <img src="@item.ImageUser" class="gap-3 rounded-circle" width="50" height="50" alt="...">
+                                <h5>@item.UserName</h5>
+                            </div>
+                            <div class="m-0">
+                                <small class="text-muted">@item.Created</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mt-4 gap-4">
+                        <div class="row">
+                            <div class="col-12 d-flex flex-nowrap flex-column">
+                                <p>@item.Caption</p>
+                                <img src="@item.Picture" class="img-size-generic " alt="" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-footer border-secondary p-2">
+                        <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a class="btn btn-sm bg-warning p-2" asp-controller="Publication" asp-action="Edit" asp-route-id="@item.Id">✏️</a>
+                                <a class="btn btn-sm bg-danger p-2" asp-controller="Publication" asp-action="Delete" asp-route-id="@item.Id">🗑️</a>
+                            </div>
+                            <button class="btn btn-toolbar text-white" onclick=toggleComment(@item.Id)><i class="">Comment</i></button>
+                        </div>
+
+                        <span class="text-danger" style="display:none;" id="error">The comment are empty!</span>
+                        <form method="post" asp-controller="Comment" asp-action="Index">
+                            <div class="form-group" id="@item.Id" style="display:none;">
+                                <textarea id="Caption" name="Caption" class="form-control" rows="3" placeholder="Escribe un comentario" required></textarea>
+                                <input type="hidden" id="PublicationId" value="@item.Id" name="PublicationId" />
+                                <input type="hidden" id="Act" value="Index" name="Act" />
+                                <input type="hidden" id="Cont" value="Publication" name="Cont" />
+                                <button class="btn btn-primary mt-2">Comment</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div @*style="display:none;" id="@item.Id"*@>
+                    <button class="btn btn-toolbar btn-outline-primary comment-toggle btn-lg w-100" onclick=toggleComments(this)>Show Comments</button>
+                    <div class="card p-0 comment d-none bg-dark">
+                        @if (item.Comments.Count() != null)
+                        {
+                            @foreach (CommentViewModel comments in CommentList.OrderByDescending(x => x.Id).Where(p => p.PublicationId == item.Id))
+                            {
+                                <div class="row p-2 comment-list bg-dark text-white">
+                                    <div class="col">
+                                        <div class="d-flex flex-row">
+                                            <img src="@comments.UserImage" class="gap-3 rounded-circle" width="30" height="30" alt="...">
+                                            <p class="mleft-p mt-1">@comments.UserName</p>
+                                        </div>
+                                        <p>@comments.Caption</p>
+                                    </div>
+                                    <hr />
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-white mt-2">Hey, you don't have a post create one.</p>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    function toggleComment(Id) {
+        var commentSection = document.getElementById(Id)
+        if (commentSection.style.display === "none") {
+            commentSection.style.display = "block";
+        } else {
+            commentSection.style.display = "none";
+        }
+    }
+</script>
+
+<script>
+    function toggleComments(commentBtn) {
+        var comments = commentBtn.parentNode.getElementsByClassName("comment");
+        for (var i = 0; i < comments.length; i++) {
+            if (comments[i].classList.contains("d-none")) {
+                comments[i].classList.remove("d-none");
+            } else {
+                comments[i].classList.add("d-none");
+            }
+        }
+    }
+</script>

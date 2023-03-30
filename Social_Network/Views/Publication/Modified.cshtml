@@ -1,0 +1,33 @@
+﻿@using Social_Network.Core.Application.ViewModels.Publications;
+@using Social_Network.Core.Application.ViewModels.Users;
+@model SavePublicationViewModel
+
+@{
+    bool Edit = Model.Id == 0 ? false : true;
+}
+
+<div class="row">
+    <div class="col-md-6 col-lg-6 offset-3">
+        <div class="card">
+            <div class="card-body">
+                @Html.ValidationSummary(false,"",new {@class = "text-danger"})
+                <form method="post" enctype="multipart/form-data" asp-controller="Publication" asp-action="@(Edit ? "EditPost":"Index")">
+                    <div class="form-group">
+                        <textarea asp-for="Caption" class="form-control" placeholder="What's on your mind?"></textarea>
+                    </div>
+                    <div class="form-control">
+                        <input class="form-control" asp-for="File" />
+                    </div>
+                    <input class="form-control" type="hidden" asp-for="Id" />
+
+                    <div class="col-12 mt-3">
+                        <button type="submit" class="btn btn-primary w-100 btn-lg">Edit Post</button>
+                        <a asp-controller="Publication" asp-action="Index" class="w-100 btn btn-warning btn-lg mt-2">Back to home</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
